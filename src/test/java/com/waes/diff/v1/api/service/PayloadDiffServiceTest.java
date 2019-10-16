@@ -1,37 +1,37 @@
 /*
- * Copyright 2015-2019 the original author or authors.
+ * Copyright 2015-2019 John Silva.
  *
- * All rights reserved. This program and the accompanying materials are
- * made available under the terms of the Eclipse Public License v2.0 which
- * accompanies this distribution and is available at
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * http://www.eclipse.org/legal/epl-v20.html
- */
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */ 
 package com.waes.diff.v1.api.service;
-
-import com.waes.diff.v1.api.domain.enums.Result;
-import com.waes.diff.v1.api.domain.model.PayloadDiffResult;
-import com.waes.diff.v1.api.repository.entity.PayloadRepository;
-import org.junit.Before;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static com.waes.diff.v1.api.factory.PayloadFactory.*;
 import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.BDDMockito.given;
 
-@RunWith(MockitoJUnitRunner.class)
-@ExtendWith(SpringExtension.class)
+import com.waes.diff.v1.api.domain.enums.Result;
+import com.waes.diff.v1.api.domain.model.PayloadDiffResult;
+import com.waes.diff.v1.api.repository.entity.PayloadRepository;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.springframework.boot.test.context.SpringBootTest;
+
+@SpringBootTest
 public class PayloadDiffServiceTest {
 
-  @Mock
-  private PayloadRepository payloadRepository;
+  @Mock private PayloadRepository payloadRepository;
   private PayloadDiffService payloadDiffService;
 
   @BeforeEach

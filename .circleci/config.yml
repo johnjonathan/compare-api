@@ -8,7 +8,7 @@ jobs:
       _JAVA_OPTIONS: "-Xmx3g"
       GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.workers.max=2"
     docker:
-      - image: circleci/openjdk:9-jdk-sid-node-browsers
+      - image: circleci/openjdk:8-jdk-stretch-node-browsers-legacy
     steps:
       - checkout
       - restore_cache:

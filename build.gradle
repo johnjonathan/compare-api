@@ -51,9 +51,14 @@ dependencies {
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 	annotationProcessor 'org.projectlombok:lombok'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation('org.springframework.boot:spring-boot-starter-test') {
+		exclude group: 'junit', module: 'junit' //by both name and group
+	}
 	testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.2.0'
+	testImplementation "org.junit.jupiter:junit-jupiter-api:5.2.0"
+	testImplementation "org.junit.jupiter:junit-jupiter-params:5.2.0"
 	testImplementation 'org.mockito:mockito-junit-jupiter:3.1.0'
+
 	testImplementation 'org.hamcrest:java-hamcrest:2.0.0.0'
 
 	integrationTestImplementation sourceSets.test.output
@@ -64,7 +69,7 @@ test.finalizedBy integrationTest
 spotless {
 	java {
 		googleJavaFormat()
-		licenseHeaderFile rootProject.file('src/spotless/eclipse-public-license-2.0.java')
+		licenseHeaderFile rootProject.file('src/spotless/apache-2.0.java')
 	}
 }
 
