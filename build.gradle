@@ -15,10 +15,6 @@ version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '1.8'
 targetCompatibility = '1.8'
 
-if(JavaVersion.current() != JavaVersion.VERSION_1_8){
-    throw new GradleException("This build must be run with java 8")
-}
-
 configurations {
 	developmentOnly
 	runtimeClasspath {
