@@ -1,35 +1,35 @@
 /*
- * Copyright 2015-2019 the original author or authors.
+ * Copyright 2015-2019 John Silva.
  *
- * All rights reserved. This program and the accompanying materials are
- * made available under the terms of the Eclipse Public License v2.0 which
- * accompanies this distribution and is available at
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * http://www.eclipse.org/legal/epl-v20.html
- */
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */ 
 package com.waes.diff.v1.api;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 import com.waes.diff.v1.api.controller.IndexController;
 import com.waes.diff.v1.api.resource.PayloadController;
 import com.waes.diff.v1.api.resource.PayloadDiffController;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-@RunWith(SpringRunner.class)
 @SpringBootTest
 public class WaesDiffApiApplicationTests {
 
-  @Autowired
-  PayloadController payloadController;
-  @Autowired
-  PayloadDiffController payloadDiffController;
-  @Autowired
-  IndexController indexController;
+  @Autowired PayloadController payloadController;
+  @Autowired PayloadDiffController payloadDiffController;
+  @Autowired IndexController indexController;
 
   @Test
   public void contextLoads() {

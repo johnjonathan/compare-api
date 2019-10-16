@@ -15,7 +15,8 @@
  */ 
 package com.waes.diff.v1.api.resource;
 
-import static com.waes.diff.v1.api.factory.PayloadFactory.*;
+import static com.waes.diff.v1.api.factory.PayloadFactory.ID_1;
+import static com.waes.diff.v1.api.factory.PayloadFactory.leftPayload1;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.waes.diff.v1.api.domain.response.PayloadResponse;
@@ -35,37 +36,22 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class PayloadControllerIntegrationTest {
+public class PayloadDiffControllerIntegrationTest {
 
   @Autowired private TestRestTemplate restTemplate;
 
   @Test
-  public void addLeftPayload_ReturnsCreatedStatus() {
+  public void getPayloadDifferences() {
     HashMap<String, String> params = new HashMap<>();
     params.put("id", ID_1);
-    UriComponentsBuilder builder = UriComponentsBuilder.fromUriString("/v1/diff/{id}}/left");
+    UriComponentsBuilder builder = UriComponentsBuilder.fromUriString("/v1/diff/{id}}");
     HttpEntity<Payload> payloadEntity = new HttpEntity<>(leftPayload1());
     ResponseEntity<PayloadResponse> response =
         restTemplate.exchange(
             builder.buildAndExpand(params).toUri(),
-            HttpMethod.POST,
+            HttpMethod.GET,
             payloadEntity,
             PayloadResponse.class);
-    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
-  }
-
-  @Test
-  public void addRightPayload_returnsCreatedStatus() {
-    HashMap<String, String> params = new HashMap<>();
-    params.put("id", ID_1);
-    UriComponentsBuilder builder = UriComponentsBuilder.fromUriString("/v1/diff/{id}}/right");
-    HttpEntity<Payload> payloadEntity = new HttpEntity<>(rightPayload1());
-    ResponseEntity<PayloadResponse> response =
-        restTemplate.exchange(
-            builder.buildAndExpand(params).toUri(),
-            HttpMethod.POST,
-            payloadEntity,
-            PayloadResponse.class);
-    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
   }
 }
