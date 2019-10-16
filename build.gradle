@@ -1,0 +1,119 @@
+plugins {
+	id 'java'
+	id 'idea'
+	id 'jacoco'
+	id 'org.sonarqube' version '2.8'
+	id 'org.springframework.boot' version '2.1.9.RELEASE'
+	id 'io.spring.dependency-management' version '1.0.8.RELEASE'
+	id 'com.diffplug.gradle.spotless' version '3.18.0'
+	id 'org.unbroken-dome.test-sets' version '2.1.1'
+	id 'com.palantir.docker' version '0.22.1'
+}
+
+group = 'com.waes.diff.api'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
+
+if(JavaVersion.current() != JavaVersion.VERSION_1_8){
+    throw new GradleException("This build must be run with java 8")
+}
+
+configurations {
+	developmentOnly
+	runtimeClasspath {
+		extendsFrom developmentOnly
+	}
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+test {
+	useJUnitPlatform()
+}
+
+testSets {
+	integrationTest {
+		dirName = 'integration-test'
+	}
+}
+
+dependencies {
+	runtimeOnly 'de.flapdoodle.embed:de.flapdoodle.embed.mongo'
+	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'io.springfox:springfox-swagger-ui:2.9.2'
+	implementation 'io.springfox:springfox-swagger2:2.9.2'
+	implementation 'org.bitbucket.cowwoc:diff-match-patch:1.2'
+	implementation 'org.apache.commons:commons-text:1.8'
+	compileOnly 'org.projectlombok:lombok'
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+	annotationProcessor 'org.projectlombok:lombok'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.2.0'
+	testImplementation 'org.mockito:mockito-junit-jupiter:3.1.0'
+	testImplementation 'org.hamcrest:java-hamcrest:2.0.0.0'
+
+	integrationTestImplementation sourceSets.test.output
+}
+
+test.finalizedBy integrationTest
+
+spotless {
+	java {
+		googleJavaFormat()
+		licenseHeaderFile rootProject.file('src/spotless/eclipse-public-license-2.0.java')
+	}
+}
+
+jacoco {
+    toolVersion = "0.8.4"
+    reportsDir = file("$buildDir/customJacocoReportDir")
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled false
+        csv.enabled false
+        html.destination file("${buildDir}/jacocoHtml")
+    }
+}
+
+jacocoTestCoverageVerification {
+	violationRules {
+		rule {
+			element = 'CLASS'
+			limit {
+				counter = 'LINE'
+				value = 'COVEREDRATIO'
+               	minimum = 0.8
+			}
+			excludes = [
+					//'com.acme.Main'
+					'com.waes.diff.v1.api.domain',
+					'com.waes.diff.v1.api.exception',
+					'com.waes.diff.v1.api.swagger'
+			]
+		}
+	}
+}
+
+task unpack(type: Copy) {
+    dependsOn bootJar
+    from(zipTree(tasks.bootJar.outputs.files.singleFile))
+    into("gradle_build/dependency")
+}
+docker {
+    name "${project.group}/${bootJar.baseName}"
+    copySpec.from(tasks.unpack.outputs).into("dependency")
+    buildArgs(['DEPENDENCY': "dependency"])
+}
+
+check.dependsOn integrationTest
+check.dependsOn jacocoTestCoverageVerification
